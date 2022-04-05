@@ -17,8 +17,8 @@ end
 
 % Trying to solve with some random constant values and intitial condition.
 
-C0 = ones(2,1)*4;
-K = ones(4,1);
+C0 = ones(5,1)*4;
+K = ones(10,1);
 tspan = [0 60];
 CA = 1;
 
