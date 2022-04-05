@@ -25,8 +25,10 @@ CA = 1;
 [tout,Cout] = ode45(@(t,C) FDGModeldF(t,C,K,CA),tspan,C0);
 
 figure
-plot(tout,Cout(:,1),tout,Cout(:,2))
-
+for i = 1:5
+    hold on
+    plot(tout,Cout(:,i))
+end
 %%
 
 
