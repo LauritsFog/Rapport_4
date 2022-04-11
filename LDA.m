@@ -14,3 +14,14 @@ end
 P = 6;
 
 K = ComputeRateConstants(data(1:P));
+
+%%
+
+pHealthy = 0.5;
+pSick = 0.5;
+
+[Sf_healthy,Sf_sick] = computeSFunctions(K(:,1:3)',K(:,4:6)',pHealthy,pSick);
+
+%%
+
+

@@ -1,4 +1,4 @@
-function [K] = ComputeRateConstants(data)
+function [K] = computeRateConstants(data)
     P = length(data); % From patient 1 to P.
 
     K = cell(5,P);
