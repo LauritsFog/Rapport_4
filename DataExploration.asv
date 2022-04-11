@@ -29,11 +29,13 @@ int4 = cumtrapz(data1(:,1)',int3);
 
 %%
 
-% Plotting the integrals.
+% Plotting integral against time. 
 
 plot(data1(:,1),int1)
 hold on
-plot(data1(:,1),int2)
+plot(data1(:,1),data1(:,2))
+
+
 
 %%
 
