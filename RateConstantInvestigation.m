@@ -46,7 +46,8 @@ xlabel('Region #, rate constant #')
 
 %%
 
-% Plotting without patient numbers. 
+% Plotting sick and healthy patients without patient numbers.
+% Use only when P = 6. 
 
 figure
 b = bar(xaxis,K);
@@ -60,7 +61,8 @@ xlabel('Region #, rate constant #')
 
 %%
 
-% Plotting with patient numbers. 
+% Plotting sick and healthy patients with patient numbers. 
+% Use only when P = 6. 
 
 c = cool(8);
 str = cell(P,1);
@@ -78,4 +80,19 @@ legend(str)
 ylabel('Rate constants values')
 xlabel('Region #, rate constant #')
 
+%%
 
+% Plotting all patients. 
+
+c = cool(P);
+str = cell(P,1);
+
+figure
+b = bar(xaxis,K);
+for i = 1:P
+    b(i).FaceColor = c(i,:);
+    str{i} = string("Patient " + i);
+end
+legend(str)
+ylabel('Rate constants values')
+xlabel('Region #, rate constant #')
