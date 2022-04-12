@@ -68,7 +68,7 @@ for i = 1:CV.NumTestSets
     
     K_test = Kchoice(:,CV.test(i)); % Extracting testing data. 
     
-    test_true(:,i) = true(CV.test(i)); % Extracting true classifications of test data. 
+    test_true(i) = true(CV.test(i)); % Extracting true classifications of test data. 
     
     % Training LDA. 
     [Sf_healthy,Sf_sick] = computeLDAFunctions(Healthy_train',Sick_train',pHealthy,pSick);
@@ -80,11 +80,13 @@ for i = 1:CV.NumTestSets
     threshold = (mean(mean(Healthy_train))+mean(mean(Sick_train)))/2;
     
     % Classifying with LDA. 
-    if Sf_healthy(K_test)/Sf_sick(K_test) > 1
+    if Sf_healthy(K_test) > Sf_sick(K_test)
         LDAClass(i) = 1;
     end
+    
     % Classifying with SVM. 
     SVMClass(i) = predict(SVM,K_test');
+    
     % Classifyiong with Baseline. 
     if mean(K_test) > threshold
         BaselineClass(i) = 1;
