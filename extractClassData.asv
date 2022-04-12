@@ -1,0 +1,15 @@
+function [dataC1, dataC2] = extractClassData(data,classification)
+    dataC2_temp = cell(1,nnz(classification));
+    dataC1_temp = cell(1,nnz(classification));
+    
+    for i = length(classification)
+        if classification(i) == 1
+            dataC1_temp{end+1} = data(:,i);
+        else
+            dataC2_temp{end+1} = data(:,i);
+        end
+    end
+    
+    dataC1 = cell2mat(dataC1_temp);
+    dataC2 = cell2mat(dataC2_temp);
+end

@@ -51,6 +51,7 @@ pHealthy = 0.5;
 pSick = 0.5;
 
 test_true = zeros(1,6);
+test_true2 = zeros(1,5);
 
 CV = cvpartition(6,'Leaveout');
 
@@ -59,6 +60,20 @@ SVMClass = zeros(1,6);
 BaselineClass = zeros(1,6);
 
 for i = 1:CV.NumTestSets
+    
+    CV2 = cvpartition(5,'Leaveout');
+    
+    for j = 1:CV2.NumTestSets
+        [Healthy_train2, Sick_train2] = extractClassData(Kchoice,true(CV2.training(j)));
+        K_test2 = Kchoice(:,CV2.test(i)); % Extracting testing data. 
+    
+        test_true2(i) = true(CV2.test(i));
+        
+        for s = 1:length(alphas)
+            [Sf_healthy2,Sf_sick2] = computeLDAFunctions(Healthy_train',Sick_train',pHealthy,pSick,alphas(s));
+        end
+    end
+    
     [Healthy_train, Sick_train] = extractClassData(Kchoice,true(CV.training(i)));
     
     K_test = Kchoice(:,CV.test(i)); % Extracting testing data. 
