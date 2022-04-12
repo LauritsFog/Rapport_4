@@ -13,7 +13,12 @@ end
 
 P = 6;
 
-K = ComputeRateConstants(data(1:P));
+K = computeRateConstants(data(1:P));
+Ks = (K - mean(K,2))./std(K,[],2);
+
+% Plot for raw data or standardized data.
+
+Kplot = Ks;
 
 %%
 
@@ -36,7 +41,7 @@ str = cell(P,1);
 
 figure
 for p = 1:P
-    plot(xaxis,K(:,p),'Color',c(p,:))
+    plot(xaxis,Kplot(:,p),'Color',c(p,:))
     hold on
     str{p} = string("Patient " + p);
 end
@@ -50,7 +55,7 @@ xlabel('Region #, rate constant #')
 % Use only when P = 6. 
 
 figure
-b = bar(xaxis,K);
+b = bar(xaxis,Kplot);
 for i = 1:3
     b(i).FaceColor = 'b';
     b(i+3).FaceColor = 'r';
@@ -68,7 +73,7 @@ c = cool(8);
 str = cell(P,1);
 
 figure
-b = bar(xaxis,K);
+b = bar(xaxis,Kplot);
 for i = 1:3
     ii = i+3;
     b(i).FaceColor = c(i,:);
@@ -88,7 +93,7 @@ c = cool(P);
 str = cell(P,1);
 
 figure
-b = bar(xaxis,K);
+b = bar(xaxis,Kplot);
 for i = 1:P
     b(i).FaceColor = c(i,:);
     str{i} = string("Patient " + i);
