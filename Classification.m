@@ -11,9 +11,9 @@ end
 
 %%
 
-P = 6;
+N = 6;
 
-K = computeRateConstants(data(1:P));
+K = computeRateConstants(data(1:N));
 
 Ks = (K - mean(K,2))./std(K,[],2);
 
@@ -35,6 +35,10 @@ pSick = 0.5;
 % Testing SVM.
 
 SVM = fitcsvm(Kchoice',true);
+
+CVSVMModel = crossval(SVM);
+
+classLoss = kfoldLoss(CVSVMModel);
 
 %%
 
@@ -87,3 +91,25 @@ for i = 1:CV.NumTestSets
         BaselineClass(i) = 1;
     end
 end
+
+% Computing generalization errors. 
+
+genErrLDA = nnz(LDAClass-test_true)/N;
+genErrSVM = nnz(SVMClass-test_true)/N;
+genErrBaseline = nnz(BaselineClass-test_true)/N;
+
+%%
+
+% Plotting confusion matrices. 
+
+figure
+subplot(3,1,1)
+confusionchart(LDAClass,test_true);
+title('LDA')
+subplot(3,1,2)
+confusionchart(SVMClass,test_true);
+title('SVM')
+subplot(3,1,3)
+confusionchart(BaselineClass,test_true);
+title('Baseline')
+
