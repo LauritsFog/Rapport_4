@@ -35,7 +35,7 @@ ill_mean = [mean(int_ill(end,1,1:3)),mean(int_ill(end,2,1:3)),mean(int_ill(end,3
 
 % Making some kind of baseline metod where making a threshold with the mean
 % of all the regions
-mean([well_mean,ill_mean])
+(mean(well_mean)+mean(ill_mean))/2
 % a person that is ill has in general lower integrals than a person that is
 % well
 %so everything under 1.1776e+03 is ill and everything over this is well
