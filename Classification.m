@@ -1,3 +1,4 @@
+clear;
 addpath(genpath('Data'));
 
 % 1: time sampling points (minutes). 2: Tracer in arterial blood (kBq / ml). 3..7: Tracer in 5
@@ -23,36 +24,12 @@ true = [1,1,1,0,0,0];
 
 %%
 
-% Testing LDA. 
-
-pHealthy = 0.5;
-pSick = 0.5;
-alpha = 0.5;
-
-[Sf_healthy,Sf_sick] = computeLDAFunctions(Kchoice(:,1:3)',Kchoice(:,4:6)',pHealthy,pSick,alpha);
-
-%%
-
-% Testing SVM.
-
-SVM = fitcsvm(Kchoice',true);
-
-CVSVMModel = crossval(SVM);
-
-classLoss = kfoldLoss(CVSVMModel);
-
-%%
-
-% Testing Baseline.
-
-threshold = (mean(mean(Kchoice(:,1:3)))+mean(mean(Kchoice(:,4:6))))/2;
-% [threshold, idx] = computeBaselineThreshold(Healthy_train,Sick_train);
-
-%%
-
-alphas = [0,10.^(-3:0)];
+alphas = [0,10.^(-3:2)];
 alpha = 0;
-outlier = linspace(0,0.5,5);
+svmParm = [2.^(3:10)]; % BoxConstraint
+% svmParm = [2.^(-7:-1)]; % OutlierFraction
+
+svmTestingParm = 'BoxConstraint';
 
 pHealthy = 0.5;
 pSick = 0.5;
@@ -95,7 +72,7 @@ for i = 1:CV.NumTestSets
         for s = 1:length(alphas) % Testing every model on testing data j. 
             [Sf_healthy2,Sf_sick2] = computeLDAFunctions(Healthy_train2',Sick_train2',pHealthy,pSick,alphas(s));
 
-            SVM = fitcsvm([Healthy_train2, Sick_train2]',true_train(CV2.training(j)),'OutlierFraction',outlier(s));
+            SVM = fitcsvm([Healthy_train2, Sick_train2]',true_train(CV2.training(j)),'Solver','ISDA','KernelFunction','linear',svmTestingParm,svmParm(s));
         
             % Classifying with LDA. 
             if Sf_healthy2(K_test2) > Sf_sick2(K_test2)
@@ -123,7 +100,7 @@ for i = 1:CV.NumTestSets
     [Sf_healthy,Sf_sick] = computeLDAFunctions(Healthy_train',Sick_train',pHealthy,pSick,alphas(LDAidx));
     
     % Training SVM. 
-    SVM = fitcsvm([Healthy_train, Sick_train]',true(CV.training(i)),'OutlierFraction',outlier(SVMidx));
+    SVM = fitcsvm([Healthy_train, Sick_train]',true(CV.training(i)),'Solver','ISDA','KernelFunction','linear',svmTestingParm,svmParm(s));
     
     % Training Baseline. 
     threshold = (mean(mean(Healthy_train))+mean(mean(Sick_train)))/2;
@@ -162,36 +139,3 @@ title('SVM')
 subplot(3,1,3)
 confusionchart(BaselineClass,test_true);
 title('Baseline')
-
-%%
-
-xstr = cell(20,1);
-iter = 1;
-for r = 1:5
-    for k = 1:4
-        xstr{iter} = string("r" + r + ", k" + k);
-        iter = iter + 1;
-    end
-end
-xaxis = categorical(cellstr(xstr));
-
-%%
-
-errorindex = 1;
-
-Kplot = [Kchoice(:,CV.training(errorindex)), Kchoice(:,CV.test(errorindex))];
-
-trueplot = true(CV.training(errorindex));
-
-figure
-b = bar(xaxis,Kplot);
-for i = 1:5
-    if true(i) == 1
-        b(i).FaceColor = 'b';
-    else
-        b(i).FaceColor = 'r';
-    end
-end
-legend([b(1),b(5),b(6)],{'Healthy training data','Sick training data','Testing data'})
-ylabel('Rate constants values')
-xlabel('Region #, rate constant #')
