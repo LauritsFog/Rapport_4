@@ -14,35 +14,45 @@ end
 
 N = 6;
 
+% Computing rate constants. 
+
 K = computeRateConstants(data(1:N));
+
+% Standardizing data. 
 
 Ks = (K - mean(K,2))./std(K,[],2);
 
+% We can quickly change between standardized and the raw data with this: 
+
 Kchoice = Ks;
+
+% True classifications of data: 1 = healthy, 0 = sick. 
 
 true = [1,1,1,0,0,0];
 
 %%
 
-alphas = [0,10.^(-3:2)];
-alpha = 0;
-svmParm = [2.^(3:10)]; % BoxConstraint
-% svmParm = [2.^(-7:-1)]; % OutlierFraction
+alphas = [0,10.^(-3:2)]; % Parameter for RDA. 
+svmParm = [2.^(3:10)]; % Parameter for SVM. 
 
 svmTestingParm = 'BoxConstraint';
+
+% Prior probabilities for healthy and sick. 
 
 pHealthy = 0.5;
 pSick = 0.5;
 
-test_true = zeros(1,6);
+test_true = zeros(1,6); % Used for saving true classifications at each outer fold. 
 
-CV = cvpartition(6,'Leaveout');
+CV = cvpartition(6,'Leaveout'); 
+
+% Classifications of each model. 
 
 LDAClass = zeros(1,6);
 SVMClass = zeros(1,6);
 BaselineClass = zeros(1,6);
 
-test_true2 = zeros(length(alphas),5);
+test_true2 = zeros(length(alphas),5); % Used for saving true classifications at each inner fold. 
 
 for i = 1:CV.NumTestSets
     [Healthy_train, Sick_train] = extractClassData(Kchoice(:,CV.training(i)),true(CV.training(i))); % Extracting training data. 
@@ -60,7 +70,7 @@ for i = 1:CV.NumTestSets
         InnerData = [Healthy_train, Sick_train]; % Combining training data for inner loop. 
         
         % Extracting healthy data and sick data based on inner training
-        % partioning. 
+        % partitioning. 
         [Healthy_train2, Sick_train2] = extractClassData(InnerData(:,CV2.training(j)),true_train(CV2.training(j)));
         
         % Extracting test data. 
