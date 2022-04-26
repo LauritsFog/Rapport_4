@@ -24,4 +24,5 @@ function[Sf_C1, Sf_C2] = computeLDAFunctions(dataC1,dataC2,pC1,pC2,alpha)
     Sf_C1 = @(x) x'*alphaC1Sigmainv*meanC1'-(1/2)*meanC1*alphaC1Sigmainv*meanC1'+log(pC1);
 
     Sf_C2 = @(x) x'*alphaC2Sigmainv*meanC2'-(1/2)*meanC2*alphaC2Sigmainv*meanC2'+log(pC2);
+
 end
