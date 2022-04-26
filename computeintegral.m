@@ -15,4 +15,4 @@ int_ill(:,i-2,p-3) = cumtrapz(data{p}(:,1)',data{p}(:,i));
 end
 end
 
-int = [int_well,int_ill}];
+int =[ int_well(end,1:5,1)', int_well(end,1:5,2)', int_well(end,1:5,3)', int_ill(end,1:5,1)',int_ill(end,1:5,2)',int_ill(end,1:5,3)'];
