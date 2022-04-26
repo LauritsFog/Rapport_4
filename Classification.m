@@ -17,6 +17,7 @@ N = 6;
 % Computing rate constants. 
 
 K = computeRateConstants(data(1:N));
+K = computeIntegrals(data(1:N));
 
 % Standardizing data. 
 
@@ -139,13 +140,19 @@ genErrBaseline = nnz(BaselineClass-test_true)/N;
 
 % Plotting confusion matrices. 
 
+cmLDA = confusionmat(LDAClass,test_true);
+cmSVM = confusionmat(SVMClass,test_true);
+cmBaseline = confusionmat(BaselineClass,test_true);
+
 figure
 subplot(3,1,1)
-confusionchart(LDAClass,test_true);
+confusionchart(cmLDA,{'Healthy','Sick'})
 title('LDA')
 subplot(3,1,2)
-confusionchart(SVMClass,test_true);
+confusionchart(cmSVM,{'Healthy','Sick'})
 title('SVM')
 subplot(3,1,3)
-confusionchart(BaselineClass,test_true);
+confusionchart(cmBaseline,{'Healthy','Sick'})
 title('Baseline')
+
+
