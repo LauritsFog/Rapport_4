@@ -56,18 +56,31 @@ xlabel('Region #, rate constant #')
 % Use only when P = 6. 
 
 
-    figure(2)
+ figure(2)
 
-    b = bar(xaxis,K);
-    
-    for i = 1:3
+ subplot(2,5,1)
+ b = bar(xaxis(1:4),K(1:4,:));
+ 
+ for i = 1:3
         b(i).FaceColor = 'b';
         b(i+3).FaceColor = 'r';
-    end
+ end
     
-    legend([b(1),b(4)],{'Healthy patients','Sick patients'})
-    ylabel('Rate constants values')
-    xlabel('Region #, rate constant #') 
+legend([b(1),b(4)],{'Healthy patients','Sick patients'})
+ylabel('Rate constants values')
+xlabel('Region #, rate constant #') 
+
+subplot(2,5,2)
+b1 = bar(xaxis(1:4),K(5:8,:));
+    
+ for i = 1:3
+        b1(i).FaceColor = 'b';
+        b1(i+3).FaceColor = 'r';
+ end
+    
+legend([b1(1),b1(4)],{'Healthy patients','Sick patients'})
+ylabel('Rate constants values')
+xlabel('Region #, rate constant #') 
 
 %%
 
@@ -90,9 +103,9 @@ legend(str)
 ylabel('Rate constants values')
 xlabel('Region #, rate constant #')
 
-%%
+%% 
 
-% Plotting all patients. 
+% Plotting all patients.  
 
 c = cool(P);
 str = cell(P,1);
@@ -103,6 +116,14 @@ for i = 1:P
     b(i).FaceColor = c(i,:);
     str{i} = string("Patient " + i);
 end
+
 legend(str)
 ylabel('Rate constants values')
 xlabel('Region #, rate constant #')
+
+
+%% 
+
+
+
+
