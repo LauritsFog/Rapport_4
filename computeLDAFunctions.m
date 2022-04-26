@@ -1,3 +1,7 @@
+% Udregner S-funktionerne ligesom i Salami-opgaven. Den eneste forskel er
+% ved sigmaerne. Ved alpha = 1 bruges pooledSigma ikke, ved alpha = 0 er
+% det kun pooledSigma der bruges. Så alpha = [0,1]. 
+
 function[Sf_C1, Sf_C2] = computeLDAFunctions(dataC1,dataC2,pC1,pC2,alpha)
 
     C1Sigma = cov(dataC1);

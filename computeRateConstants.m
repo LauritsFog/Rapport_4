@@ -1,3 +1,8 @@
+% Udregner rate konstanterne på den måde, som er beskrevet i Overleaf. c =
+% (A'*A)\(A'*y) kommer fra numeriske algoritmer kurset, hvor det forklares,
+% hvorfor man kan gøre sådan. De fire udtryk for udregning af k'erne kan
+% ses i Maple dokumentet. 
+
 function [K] = computeRateConstants(data)
     P = length(data); % From patient 1 to P.
 
