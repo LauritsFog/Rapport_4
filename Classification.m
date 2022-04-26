@@ -12,12 +12,11 @@ end
 
 %%
 
-N = 6;
+N = 10;
 
 % Computing rate constants. 
 
 K = computeRateConstants(data(1:N));
-K = computeIntegrals(data(1:N));
 
 % Standardizing data. 
 
@@ -155,4 +154,33 @@ subplot(3,1,3)
 confusionchart(cmBaseline,{'Healthy','Sick'})
 title('Baseline')
 
+%%
+
+Healthy_train = Kchoice(:,1:3);
+Sick_train = Kchoice(:,4:6);
+
+[Sf_healthy,Sf_sick] = computeLDAFunctions(Healthy_train',Sick_train',pHealthy,pSick,alphas(LDAidx));
+
+SVM = fitcsvm([Healthy_train, Sick_train]',true,'Solver','ISDA','KernelFunction','linear',svmTestingParm,svmParm(s));
+
+threshold = (mean(mean(Healthy_train))+mean(mean(Sick_train)))/2;
+
+LDAClassNew = zeros(1,4);
+SVMClassNew = zeros(1,4);
+BaselineClassNew = zeros(1,4);
+
+for i = 7:10
+    % Classifying with LDA. 
+    if Sf_healthy(Kchoice(:,i)) > Sf_sick(Kchoice(:,i))
+        LDAClassNew(i-6) = 1;
+    end
+    
+    % Classifying with SVM. 
+    SVMClassNew(i-6) = predict(SVM,Kchoice(:,i)');
+    
+    % Classifying with Baseline. 
+    if mean(Kchoice(:,i)) > threshold
+        BaselineClassNew(i-6) = 1;
+    end
+end
 
